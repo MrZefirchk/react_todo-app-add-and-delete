@@ -38,18 +38,20 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  const filteredTodos = useMemo(() => {
-    todos.filter(todo => {
-      switch (selectFilterStatus) {
-        case FilterStatus.Active:
-          return !todo.completed;
-        case FilterStatus.Completed:
-          return todo.completed;
-        default:
-          return true;
-      }
-    });
-  }, [todos, selectFilterStatus]);
+  const filteredTodos = useMemo(
+    () =>
+      todos.filter(todo => {
+        switch (selectFilterStatus) {
+          case FilterStatus.Active:
+            return !todo.completed;
+          case FilterStatus.Completed:
+            return todo.completed;
+          default:
+            return true;
+        }
+      }),
+    [todos, selectFilterStatus],
+  );
 
   useEffect(() => {
     if (isErrorVisible) {
