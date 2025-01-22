@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import { ErrorNotification } from './components/ErrorNotification';
 import { TodoList } from './components/TodoList';
@@ -13,7 +13,7 @@ import { handleError } from './utils/utils';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
+  // const [filteredTodos, setFilteredTodos] = useState<Todo[]>(todos);
   const [searchQuery, setSearchQuery] = useState('');
   const [isErrorVisible, setIsErrorVisible] = useState(false);
   const [selectFilterStatus, setSelectFilterStatus] = useState<FilterStatus>(
@@ -38,8 +38,8 @@ export const App: React.FC = () => {
       });
   }, []);
 
-  useEffect(() => {
-    const newFilteredTodos = todos.filter(todo => {
+  const filteredTodos = useMemo(() => {
+    todos.filter(todo => {
       switch (selectFilterStatus) {
         case FilterStatus.Active:
           return !todo.completed;
@@ -49,9 +49,7 @@ export const App: React.FC = () => {
           return true;
       }
     });
-
-    setFilteredTodos(newFilteredTodos);
-  }, [selectFilterStatus, todos]);
+  }, [todos, selectFilterStatus]);
 
   useEffect(() => {
     if (isErrorVisible) {
